@@ -13,30 +13,34 @@ spring:
   profiles:
     active: sit
   application:
-    name: eureka-server
+    name: config
   cloud:
     config:
-      enabled: false
-  security:
-    user:
-      name: root
-      password: 123456
-
-
-eureka:
-  instance:
-    hostname: eureka02
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-  client:
-#   单节点是false 集群环境需要改为true(默认)
-#   register-with-eureka: true
-#   fetch-registry: true
-   serviceUrl:
-    defaultZone: http://root:123456@localhost:2222/eureka/
-  server:
-    enable-self-preservation: true #自我保护机制 true为开启
-    eviction-interval-timer-in-ms: 60000 #清理间隔 默认60S
+      server:
+        git:
+          # 配置git仓库位置
+          uri: https://github.com/zhoufanshou/config-new.git
+          # 配置仓库路径下的相对搜索位置，多个中间逗号隔开
+          default-label: master
+          search-paths: /config
+#          # 访问git仓库的用户名
+          username: zhoufanshou
+#          # 访问git仓库的用户密码
+          password: zh2008ha2211
+          timeout: 10
+          skip-ssl-validation: true
+#      enabled: false
+#eureka:
+#  instance:
+#    hostname: config
+#    prefer-ip-address: true
+#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+#  client:
+##   单节点是false 集群环境需要改为true
+##   register-with-eureka: true
+##   fetch-registry: true
+#   serviceUrl:
+#    defaultZone: http://root:123456@localhost:2223/eureka/,http://root:123456@localhost:2222/eureka/
 management:
   endpoints:
     web:
@@ -47,4 +51,4 @@ management:
       show-details: ALWAYS
 logging:
   file:
-    name: ./logs/neweureka_log.log
+    name: ./logs/config_log.log
