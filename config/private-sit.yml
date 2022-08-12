@@ -1,0 +1,50 @@
+spring:
+  sleuth:
+    web:
+      client:
+        # 开启采集链路
+        enabled: true
+    sampler:
+      # 默认采集是 0.1(百分之十),生产环境采用默认，测试环境可以修改为1.0
+      probability: 1.0
+    # zipkin服务所在地址
+    zipkin:
+      base-url: http://localhost:9411/
+  profiles:
+    active: sit
+  application:
+    name: eureka-server
+  cloud:
+    config:
+      enabled: false
+  security:
+    user:
+      name: root
+      password: 123456
+
+
+eureka:
+  instance:
+    hostname: eureka02
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+#   单节点是false 集群环境需要改为true(默认)
+#   register-with-eureka: true
+#   fetch-registry: true
+   serviceUrl:
+    defaultZone: http://root:123456@localhost:2222/eureka/
+  server:
+    enable-self-preservation: true #自我保护机制 true为开启
+    eviction-interval-timer-in-ms: 60000 #清理间隔 默认60S
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+logging:
+  file:
+    name: ./logs/neweureka_log.log
